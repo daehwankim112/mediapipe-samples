@@ -295,5 +295,30 @@
                 android:theme="@style/BottomSheetSpinnerItemStyle" />
 
         </RelativeLayout>
+
+        <!-- Hand tracking mode below -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/bottom_sheet_default_row_margin">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/label_mode"
+                android:textColor="@color/bottom_sheet_text_color"
+                android:textSize="@dimen/bottom_sheet_text_size" />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinner_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:entries="@array/mode_titles"
+                android:minWidth="@dimen/bottom_sheet_spinner_delegate_min_width"
+                android:spinnerMode="dropdown"
+                android:theme="@style/BottomSheetSpinnerItemStyle" />
+
+        </RelativeLayout>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </androidx.core.widget.NestedScrollView>

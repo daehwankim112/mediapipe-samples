@@ -22,6 +22,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
+import com.google.mediapipe.examples.handlandmarker.HandLandmarkerHelper.Companion.DELEGATE_CPU
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarker
 import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarkerResult
@@ -38,6 +39,8 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
     private var scaleFactor: Float = 1f
     private var imageWidth: Int = 1
     private var imageHeight: Int = 1
+
+    private var currentMode: Int = MODE_ORIGINAL
 
     init {
         initPaints()
@@ -64,29 +67,37 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
-        results?.let { handLandmarkerResult ->
-            for (landmark in handLandmarkerResult.landmarks()) {
-                for (normalizedLandmark in landmark) {
-                    canvas.drawPoint(
-                        normalizedLandmark.x() * imageWidth * scaleFactor,
-                        normalizedLandmark.y() * imageHeight * scaleFactor,
-                        pointPaint
-                    )
-                }
+        when (currentMode) {
+            MODE_ORIGINAL -> {
+                results?.let { handLandmarkerResult ->
+                    for (landmark in handLandmarkerResult.landmarks()) {
+                        for (normalizedLandmark in landmark) {
+                            canvas.drawPoint(
+                                normalizedLandmark.x() * imageWidth * scaleFactor,
+                                normalizedLandmark.y() * imageHeight * scaleFactor,
+                                pointPaint
+                            )
+                        }
 
-                HandLandmarker.HAND_CONNECTIONS.forEach {
-                    canvas.drawLine(
-                        landmark.get(it!!.start())
-                            .x() * imageWidth * scaleFactor,
-                        landmark.get(it.start())
-                            .y() * imageHeight * scaleFactor,
-                        landmark.get(it.end())
-                            .x() * imageWidth * scaleFactor,
-                        landmark.get(it.end())
-                            .y() * imageHeight * scaleFactor,
-                        linePaint
-                    )
+
+                        HandLandmarker.HAND_CONNECTIONS.forEach {
+                            canvas.drawLine(
+                                landmark.get(it!!.start())
+                                    .x() * imageWidth * scaleFactor,
+                                landmark.get(it.start())
+                                    .y() * imageHeight * scaleFactor,
+                                landmark.get(it.end())
+                                    .x() * imageWidth * scaleFactor,
+                                landmark.get(it.end())
+                                    .y() * imageHeight * scaleFactor,
+                                linePaint
+                            )
+                        }
+                    }
                 }
+            }
+            MODE_CONVEX_HULL -> {
+
             }
         }
     }
@@ -119,5 +130,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
 
     companion object {
         private const val LANDMARK_STROKE_WIDTH = 8F
+        private const val MODE_ORIGINAL = 0
+        private const val MODE_CONVEX_HULL = 1
     }
 }

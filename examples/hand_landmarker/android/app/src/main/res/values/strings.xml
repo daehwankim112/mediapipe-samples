@@ -44,9 +44,15 @@
         Threshold</string>
     <string name="label_num_hands">Number of Hands</string>
     <string name="label_delegate">Delegate</string>
+    <string name="label_mode">Mode</string>
 
     <string-array name="delegate_spinner_titles">
         <item>CPU</item>
         <item>GPU</item>
+    </string-array>
+
+    <string-array name="mode_titles">
+        <item>Original</item>
+        <item>Convex Hull</item>
     </string-array>
 </resources>
