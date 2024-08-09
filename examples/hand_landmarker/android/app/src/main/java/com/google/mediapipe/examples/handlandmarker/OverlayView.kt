@@ -19,13 +19,18 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
-import com.google.mediapipe.examples.handlandmarker.HandLandmarkerHelper.Companion.DELEGATE_CPU
 import com.google.mediapipe.tasks.vision.core.RunningMode
 import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarker
 import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarkerResult
+import org.opencv.core.MatOfInt
+import org.opencv.core.MatOfPoint
+import org.opencv.core.MatOfPoint2f
+import org.opencv.core.Point
+import org.opencv.imgproc.Imgproc
 import kotlin.math.max
 import kotlin.math.min
 
@@ -39,6 +44,11 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
     private var scaleFactor: Float = 1f
     private var imageWidth: Int = 1
     private var imageHeight: Int = 1
+
+    private val paint = Paint().apply {
+        color = android.graphics.Color.RED
+        strokeWidth = 5f
+    }
 
     var currentMode: Int = MODE_ORIGINAL
 
@@ -79,7 +89,6 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
                             )
                         }
 
-
                         HandLandmarker.HAND_CONNECTIONS.forEach {
                             canvas.drawLine(
                                 landmark.get(it!!.start())
@@ -97,7 +106,44 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
                 }
             }
             MODE_CONVEX_HULL -> {
+                results?.let { handLandmarkerResult ->
+                    var normalizedLandmarks: MutableList<PointF> = ArrayList()
+                    for (landmark in handLandmarkerResult.landmarks()) {
+                        for (normalizedLandmark in landmark) {
+                            // Scale points to canvas size
+                            val scaledX = normalizedLandmark.x() * imageWidth * scaleFactor
+                            val scaledY = normalizedLandmark.y() * imageHeight * scaleFactor
 
+                            // Draw original points
+                            canvas.drawPoint(scaledX, scaledY, pointPaint)
+
+                            // Add scaled points to the list
+                            normalizedLandmarks.add(PointF(scaledX, scaledY))
+                        }
+
+                        // Convert to MatOfPoint for OpenCV
+                        val matOfPoint = MatOfPoint(*normalizedLandmarks.map { Point(it.x.toDouble(), it.y.toDouble()) }.toTypedArray())
+
+                        // Calculate convex hull
+                        val hull = MatOfInt()
+                        Imgproc.convexHull(matOfPoint, hull)
+
+                        // Extract hull points
+                        val hullPoints = mutableListOf<PointF>()
+                        val hullIndices = hull.toArray()
+                        for (i in hullIndices) {
+                            val point = matOfPoint.toList()[i]
+                            hullPoints.add(PointF(point.x.toFloat(), point.y.toFloat()))
+                        }
+
+                        // Draw the convex hull
+                        for (i in hullPoints.indices) {
+                            val p1 = hullPoints[i]
+                            val p2 = hullPoints[(i + 1) % hullPoints.size]
+                            canvas.drawLine(p1.x, p1.y, p2.x, p2.y, paint)
+                        }
+                    }
+                }
             }
         }
     }
