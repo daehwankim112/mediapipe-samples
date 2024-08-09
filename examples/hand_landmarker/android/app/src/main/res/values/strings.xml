@@ -54,5 +54,6 @@
     <string-array name="mode_titles">
         <item>Original</item>
         <item>Convex Hull</item>
+        <item>Convex Hull Blurred</item>
     </string-array>
 </resources>

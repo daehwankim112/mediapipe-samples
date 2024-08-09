@@ -376,6 +376,7 @@ class HandLandmarkerHelper(
         const val GPU_ERROR = 1
         const val MODE_ORIGINAL = 0
         const val MODE_CONVEX_HULL = 1
+        const val MODE_CONVEX_HULL_BLURRED = 2
     }
 
     data class ResultBundle(

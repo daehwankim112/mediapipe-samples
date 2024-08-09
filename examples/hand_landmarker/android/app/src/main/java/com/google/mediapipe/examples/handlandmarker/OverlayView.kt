@@ -145,6 +145,9 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
                     }
                 }
             }
+            MODE_CONVEX_HULL_BLURRED -> {
+
+            }
         }
     }
 
@@ -180,5 +183,6 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
         private const val LANDMARK_STROKE_WIDTH = 8F
         private const val MODE_ORIGINAL = 0
         private const val MODE_CONVEX_HULL = 1
+        private const val MODE_CONVEX_HULL_BLURRED = 2
     }
 }
