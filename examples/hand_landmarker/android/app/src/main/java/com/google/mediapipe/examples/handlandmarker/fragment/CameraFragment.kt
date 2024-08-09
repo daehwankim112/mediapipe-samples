@@ -37,6 +37,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import com.google.mediapipe.examples.handlandmarker.HandLandmarkerHelper
 import com.google.mediapipe.examples.handlandmarker.MainViewModel
+import com.google.mediapipe.examples.handlandmarker.OverlayView
 import com.google.mediapipe.examples.handlandmarker.R
 import com.google.mediapipe.examples.handlandmarker.databinding.FragmentCameraBinding
 import com.google.mediapipe.tasks.vision.core.RunningMode
@@ -94,6 +95,7 @@ class CameraFragment : Fragment(), HandLandmarkerHelper.LandmarkerListener {
             viewModel.setMinHandTrackingConfidence(handLandmarkerHelper.minHandTrackingConfidence)
             viewModel.setMinHandPresenceConfidence(handLandmarkerHelper.minHandPresenceConfidence)
             viewModel.setDelegate(handLandmarkerHelper.currentDelegate)
+            viewModel.setCurrentMode(handLandmarkerHelper.currentMode)
 
             // Close the HandLandmarkerHelper and release resources
             backgroundExecutor.execute { handLandmarkerHelper.clearHandLandmarker() }
@@ -258,6 +260,29 @@ class CameraFragment : Fragment(), HandLandmarkerHelper.LandmarkerListener {
                     /* no op */
                 }
             }
+
+        // When clicked, change the rendering mode.
+        // Current options are ORIGINAL and CONVEX HULL
+        fragmentCameraBinding.bottomSheetLayout.spinnerMode.setSelection(
+            viewModel.currentMode, false
+        )
+        fragmentCameraBinding.bottomSheetLayout.spinnerDelegate.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long
+                ) {
+                    try {
+                        handLandmarkerHelper.currentMode = p2
+                        updateControlsUi()
+                    } catch(e: UninitializedPropertyAccessException) {
+                        Log.e(TAG, "HandLandmarkerHelper has not been initialized yet.")
+                    }
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    /* no op */
+                }
+            }
     }
 
     // Update the values displayed in the bottom sheet. Reset Handlandmarker
@@ -384,7 +409,8 @@ class CameraFragment : Fragment(), HandLandmarkerHelper.LandmarkerListener {
                     resultBundle.results.first(),
                     resultBundle.inputImageHeight,
                     resultBundle.inputImageWidth,
-                    RunningMode.LIVE_STREAM
+                    RunningMode.LIVE_STREAM,
+                    viewModel.currentMode
                 )
 
                 // Force a redraw

@@ -40,7 +40,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
     private var imageWidth: Int = 1
     private var imageHeight: Int = 1
 
-    private var currentMode: Int = MODE_ORIGINAL
+    var currentMode: Int = MODE_ORIGINAL
 
     init {
         initPaints()
@@ -106,7 +106,8 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
         handLandmarkerResults: HandLandmarkerResult,
         imageHeight: Int,
         imageWidth: Int,
-        runningMode: RunningMode = RunningMode.IMAGE
+        runningMode: RunningMode = RunningMode.IMAGE,
+        resultCurrentMode: Int
     ) {
         results = handLandmarkerResults
 
@@ -125,6 +126,7 @@ class OverlayView(context: Context?, attrs: AttributeSet?) :
                 max(width * 1f / imageWidth, height * 1f / imageHeight)
             }
         }
+        currentMode = resultCurrentMode
         invalidate()
     }
 

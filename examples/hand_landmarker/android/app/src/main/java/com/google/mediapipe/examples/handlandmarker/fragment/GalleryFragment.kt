@@ -287,7 +287,8 @@ class GalleryFragment : Fragment(), HandLandmarkerHelper.LandmarkerListener {
                                 result.results[0],
                                 bitmap.height,
                                 bitmap.width,
-                                RunningMode.IMAGE
+                                RunningMode.IMAGE,
+                                viewModel.currentMode
                             )
 
                             setUiEnabled(true)
@@ -366,7 +367,8 @@ class GalleryFragment : Fragment(), HandLandmarkerHelper.LandmarkerListener {
                             result.results[resultIndex],
                             result.inputImageHeight,
                             result.inputImageWidth,
-                            RunningMode.VIDEO
+                            RunningMode.VIDEO,
+                            viewModel.currentMode
                         )
 
                         setUiEnabled(true)

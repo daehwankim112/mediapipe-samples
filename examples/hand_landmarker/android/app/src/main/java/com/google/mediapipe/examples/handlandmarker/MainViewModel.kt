@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModel
 class MainViewModel : ViewModel() {
 
     private var _delegate: Int = HandLandmarkerHelper.DELEGATE_CPU
+    private var _currentMode: Int = HandLandmarkerHelper.MODE_ORIGINAL
     private var _minHandDetectionConfidence: Float =
         HandLandmarkerHelper.DEFAULT_HAND_DETECTION_CONFIDENCE
     private var _minHandTrackingConfidence: Float = HandLandmarkerHelper
@@ -33,6 +34,7 @@ class MainViewModel : ViewModel() {
     private var _maxHands: Int = HandLandmarkerHelper.DEFAULT_NUM_HANDS
 
     val currentDelegate: Int get() = _delegate
+    val currentMode: Int get() = _currentMode
     val currentMinHandDetectionConfidence: Float
         get() =
             _minHandDetectionConfidence
@@ -46,6 +48,10 @@ class MainViewModel : ViewModel() {
 
     fun setDelegate(delegate: Int) {
         _delegate = delegate
+    }
+
+    fun setCurrentMode(mode: Int) {
+        _currentMode = mode
     }
 
     fun setMinHandDetectionConfidence(confidence: Float) {

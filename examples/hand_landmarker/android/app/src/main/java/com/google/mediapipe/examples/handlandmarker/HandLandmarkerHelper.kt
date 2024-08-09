@@ -38,6 +38,7 @@ class HandLandmarkerHelper(
     var minHandPresenceConfidence: Float = DEFAULT_HAND_PRESENCE_CONFIDENCE,
     var maxNumHands: Int = DEFAULT_NUM_HANDS,
     var currentDelegate: Int = DELEGATE_CPU,
+    var currentMode: Int = MODE_ORIGINAL,
     var runningMode: RunningMode = RunningMode.IMAGE,
     val context: Context,
     // this listener is only used when running in RunningMode.LIVE_STREAM
@@ -365,6 +366,8 @@ class HandLandmarkerHelper(
         const val DEFAULT_NUM_HANDS = 1
         const val OTHER_ERROR = 0
         const val GPU_ERROR = 1
+        const val MODE_ORIGINAL = 0
+        const val MODE_CONVEX_HULL = 1
     }
 
     data class ResultBundle(
