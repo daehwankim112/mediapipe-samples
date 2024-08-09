@@ -82,6 +82,12 @@ class HandLandmarkerHelper(
             }
         }
 
+        when (currentMode) {
+            MODE_ORIGINAL -> {
+
+            }
+        }
+
         baseOptionBuilder.setModelAssetPath(MP_HAND_LANDMARKER_TASK)
 
         // Check if runningMode is consistent with handLandmarkerHelperListener
@@ -287,7 +293,7 @@ class HandLandmarkerHelper(
         return if (didErrorOccurred) {
             null
         } else {
-            ResultBundle(resultList, inferenceTimePerFrameMs, height, width)
+            ResultBundle(resultList, inferenceTimePerFrameMs, height, width, currentMode)
         }
     }
 
@@ -316,7 +322,8 @@ class HandLandmarkerHelper(
                 listOf(landmarkResult),
                 inferenceTimeMs,
                 image.height,
-                image.width
+                image.width,
+                currentMode
             )
         }
 
@@ -341,7 +348,8 @@ class HandLandmarkerHelper(
                 listOf(result),
                 inferenceTime,
                 input.height,
-                input.width
+                input.width,
+                currentMode
             )
         )
     }
@@ -375,6 +383,7 @@ class HandLandmarkerHelper(
         val inferenceTime: Long,
         val inputImageHeight: Int,
         val inputImageWidth: Int,
+        val currentMode: Int
     )
 
     interface LandmarkerListener {

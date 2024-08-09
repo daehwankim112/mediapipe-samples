@@ -266,7 +266,7 @@ class CameraFragment : Fragment(), HandLandmarkerHelper.LandmarkerListener {
         fragmentCameraBinding.bottomSheetLayout.spinnerMode.setSelection(
             viewModel.currentMode, false
         )
-        fragmentCameraBinding.bottomSheetLayout.spinnerDelegate.onItemSelectedListener =
+        fragmentCameraBinding.bottomSheetLayout.spinnerMode.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long
@@ -410,7 +410,7 @@ class CameraFragment : Fragment(), HandLandmarkerHelper.LandmarkerListener {
                     resultBundle.inputImageHeight,
                     resultBundle.inputImageWidth,
                     RunningMode.LIVE_STREAM,
-                    viewModel.currentMode
+                    resultBundle.currentMode
                 )
 
                 // Force a redraw
